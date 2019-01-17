@@ -1,7 +1,6 @@
 #include "task_net.h"
 #include "common.h"
 #include "delay.h"
-#include "tcp.h"
 #include "net_protocol.h"
 #include "rtc.h"
 

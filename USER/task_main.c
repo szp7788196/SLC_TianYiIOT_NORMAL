@@ -3,11 +3,14 @@
 #include "delay.h"
 #include "usart.h"
 #include "inventr.h"
+#include "pwm.h"
+#include "mcp4725.h"
 
 
 TaskHandle_t xHandleTaskMAIN = NULL;
 
 u8 MirrorLightLevelPercent = 0;
+u8 MirrorPowerINTFC = 0xFF;
 unsigned portBASE_TYPE MAIN_Satck;
 
 void vTaskMAIN(void *pvParameters)
@@ -17,7 +20,9 @@ void vTaskMAIN(void *pvParameters)
 
 	times_sync = GetSysTick1s();
 
-	InventrSetLightLevel(LightLevelPercent);				//上电默认上次关机前的亮度
+	SetLightLevel(PowerINTFC, 100);
+	delay_ms(1000);
+	SetLightLevel(PowerINTFC, INIT_LIGHT_LEVEL);
 
 	while(1)
 	{
@@ -31,18 +36,20 @@ void vTaskMAIN(void *pvParameters)
 			}
 		}
 
-		if(MirrorLightLevelPercent != LightLevelPercent)
+		if(MirrorLightLevelPercent != LightLevelPercent || \
+			MirrorPowerINTFC != PowerINTFC)
 		{
 			MirrorLightLevelPercent = LightLevelPercent;
+			MirrorPowerINTFC = PowerINTFC;
 
-			InventrSetLightLevel(LightLevelPercent);
+			SetLightLevel(PowerINTFC, LightLevelPercent);
 		}
 
-		if(GetSysTick1s() - times_sync >= 3600)				//每隔1h同步一次时间
+		if(GetSysTick1s() - times_sync >= 14400)				//每隔4h同步一次时间
 		{
 			times_sync = GetSysTick1s();
 
-			GetTimeOK = 0;
+			GetTimeOK = 2;
 		}
 
 		if(NeedToReset == 1)								//接收到重启的命令
@@ -55,7 +62,7 @@ void vTaskMAIN(void *pvParameters)
 		}
 
 		delay_ms(100);
-		MAIN_Satck = uxTaskGetStackHighWaterMark(NULL);
+//		MAIN_Satck = uxTaskGetStackHighWaterMark(NULL);
 	}
 }
 

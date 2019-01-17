@@ -165,7 +165,7 @@
             <Capability>1</Capability>
             <DriverSelection>4099</DriverSelection>
           </Flash1>
-          <bUseTDR>0</bUseTDR>
+          <bUseTDR>1</bUseTDR>
           <Flash2>Segger\JL2CM3.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
@@ -351,7 +351,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\DEVICEDRIVER;..\FREERTOS\inc;..\MALLOC;..\JSON;..\FWLIB\inc;..\PROTOCOL;..\SYSTEM\delay;..\SYSTEM\sys;..\USER;..\PERIPHERAL\iic1;..\DEVICEDRIVER\24cxx;..\DEVICEDRIVER\sht2x;..\DEVICEDRIVER\bh1750;..\PERIPHERAL\iic2;..\DEVICEDRIVER\led;..\PERIPHERAL\rtc;..\PERIPHERAL\usart;..\DEVICEDRIVER\bg96;..\NET;..\DEVICEDRIVER\power;..\DEVICEDRIVER\bcxx</IncludePath>
+              <IncludePath>..\CORE;..\DEVICEDRIVER;..\FREERTOS\inc;..\MALLOC;..\JSON;..\FWLIB\inc;..\PROTOCOL;..\SYSTEM\delay;..\SYSTEM\sys;..\USER;..\PERIPHERAL\iic1;..\DEVICEDRIVER\24cxx;..\DEVICEDRIVER\sht2x;..\DEVICEDRIVER\bh1750;..\PERIPHERAL\iic2;..\DEVICEDRIVER\led;..\PERIPHERAL\rtc;..\PERIPHERAL\usart;..\NET;..\DEVICEDRIVER\power;..\DEVICEDRIVER\mcp4725;..\DEVICEDRIVER\att7059x;..\DEVICEDRIVER\pwm;..\DEVICEDRIVER\dali;..\PERIPHERAL\timer;..\DEVICEDRIVER\cd4015b;..\DEVICEDRIVER\bcxx</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -497,6 +497,11 @@
               <FileType>1</FileType>
               <FilePath>..\PERIPHERAL\usart\usart.c</FilePath>
             </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PERIPHERAL\timer\timer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -526,6 +531,31 @@
               <FileName>inventr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\DEVICEDRIVER\power\inventr.c</FilePath>
+            </File>
+            <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DEVICEDRIVER\pwm\pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcp4725.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DEVICEDRIVER\mcp4725\mcp4725.c</FilePath>
+            </File>
+            <File>
+              <FileName>att7059x.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DEVICEDRIVER\att7059x\att7059x.c</FilePath>
+            </File>
+            <File>
+              <FileName>dali.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DEVICEDRIVER\dali\dali.c</FilePath>
+            </File>
+            <File>
+              <FileName>cd4051b.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DEVICEDRIVER\cd4015b\cd4051b.c</FilePath>
             </File>
             <File>
               <FileName>bcxx.c</FileName>

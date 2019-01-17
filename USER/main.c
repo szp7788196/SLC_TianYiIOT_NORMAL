@@ -4,6 +4,13 @@
 #include "led.h"
 #include "rtc.h"
 #include "usart.h"
+#include "pwm.h"
+#include "mcp4725.h"
+#include "att7059x.h"
+#include "inventr.h"
+#include "timer.h"
+#include "dali.h"
+#include "cd4051b.h"
 
 u16 i = 0;
 u8 eepbuf[256];
@@ -14,7 +21,7 @@ RCC_ClocksTypeDef RCC_Clocks;
 int main(void)
 {
 //	SCB->VTOR = FLASH_BASE | 0x08000; /* Vector Table Relocation in Internal FLASH. */
-	IWDG_Init(IWDG_Prescaler_128,625);	//128分频 312.5HZ 625为2秒
+//	IWDG_Init(IWDG_Prescaler_128,625);	//128分频 312.5HZ 625为2秒
 
 	RCC_GetClocksFreq(&RCC_Clocks);		//查看各个总线的时钟频率
 	__set_PRIMASK(1);	//关闭全局中断
@@ -23,11 +30,17 @@ int main(void)
 	delay_init(72);
 	RTC_Init();
 	AT24CXX_Init();
+	Mcp4725Init();
 	LED_Init();
-	TIM2_Init(99,7199);
+	RELAY_Init();
+	CD4051B_Init();
+	TIM2_Init(7499,0);
+	TIM5_Int_Init(2000,36 - 1);
 	USART1_Init(115200);
 	USART2_Init(9600);
+	USART3_Init(4800);
 	UART4_Init(9600);
+	UART5_Init(4800);
 
 	__set_PRIMASK(0);	//开启全局中断
 

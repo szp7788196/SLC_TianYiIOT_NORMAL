@@ -2,7 +2,6 @@
 #define __NET_PROTOCOL_H
 
 #include "sys.h"
-#include "tcp.h"
 #include "bcxx.h"
 #include "common.h"
 

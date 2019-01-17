@@ -26,12 +26,17 @@ void bcxx_hard_init(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC, ENABLE);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 	BCXX_PWREN_LOW;
 	BCXX_RST_LOW;
@@ -740,6 +745,65 @@ unsigned char bcxx_set_AT_NSOFT(unsigned char socket, char *ip,char *port,unsign
 					get_str1((unsigned char *)bcxx_rx_cmd_buf, ",", 4, ",", 5, (unsigned char *)outbuf);
 
 					ret = strlen((char *)outbuf);
+				}
+			}
+		}
+    }
+    bcxx_mode = NET_MODE;
+#ifdef BCXX_PRINTF_RX_BUF
+	bcxx_print_rx_buf();
+#endif
+    return ret;
+}
+
+//建立一个TCP连接
+unsigned char bcxx_set_AT_NSOCO(unsigned char socket, char *ip,char *port)
+{
+	unsigned char ret = 0;
+    bcxx_wait_mode(CMD_MODE);
+    bcxx_clear_rx_cmd_buffer();
+	printf("AT+NSOCO=%d,%s,%s\r\n",socket,ip,port);
+    if(bcxx_wait_cmd2("OK",TIMEOUT_1S) == RECEIVED)
+    {
+        if(search_str((unsigned char *)bcxx_rx_cmd_buf, "OK") != -1)
+		{
+			ret = 1;
+		}
+    }
+    bcxx_mode = NET_MODE;
+#ifdef BCXX_PRINTF_RX_BUF
+	bcxx_print_rx_buf();
+#endif
+    return ret;
+}
+
+//通过TCP连接发送数据，并等待响应包
+unsigned char bcxx_set_AT_NSOSD(unsigned char socket, unsigned int len,char *inbuf,char *outbuf)
+{
+	unsigned char ret = 0;
+    bcxx_wait_mode(CMD_MODE);
+    bcxx_clear_rx_cmd_buffer();
+	printf("AT+NSOSD=%d,%d,%s,0x100,100\r\n",socket,len,inbuf);
+    if(bcxx_wait_cmd2("OK",TIMEOUT_1S) == RECEIVED)
+    {
+        if(search_str((unsigned char *)bcxx_rx_cmd_buf, "OK") != -1)
+		{
+			bcxx_clear_rx_cmd_buffer();
+			
+			if(bcxx_wait_cmd2("+NSOSTR:",TIMEOUT_15S) == RECEIVED)
+			{
+				bcxx_clear_rx_cmd_buffer();
+				
+				if(bcxx_wait_cmd2("+NSONMI:",TIMEOUT_15S) == RECEIVED)
+				{
+					bcxx_clear_rx_cmd_buffer();
+					printf("AT+NSORF=%d,%d\r\n",socket,1358);
+					if(bcxx_wait_cmd2("OK",TIMEOUT_2S) == RECEIVED)
+					{
+						get_str1((unsigned char *)bcxx_rx_cmd_buf, ",", 4, ",", 5, (unsigned char *)outbuf);
+
+						ret = strlen((char *)outbuf);
+					}
 				}
 			}
 		}

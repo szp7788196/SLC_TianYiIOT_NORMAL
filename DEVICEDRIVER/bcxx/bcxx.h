@@ -8,8 +8,8 @@
 #define BCXX_RST_HIGH		GPIO_SetBits(GPIOC,GPIO_Pin_2)
 #define BCXX_RST_LOW		GPIO_ResetBits(GPIOC,GPIO_Pin_2)
 
-#define BCXX_PWREN_HIGH		GPIO_SetBits(GPIOC,GPIO_Pin_3)
-#define BCXX_PWREN_LOW		GPIO_ResetBits(GPIOC,GPIO_Pin_3)
+#define BCXX_PWREN_HIGH		GPIO_SetBits(GPIOB,GPIO_Pin_12)
+#define BCXX_PWREN_LOW		GPIO_ResetBits(GPIOB,GPIO_Pin_12)
 
 
 #define BCXX_PRINTF_RX_BUF
@@ -150,6 +150,8 @@ unsigned char	bcxx_get_AT_CCLK(char *buf);
 unsigned char	bcxx_set_AT_NSCOR(char *type, char *protocol,char *port);
 unsigned char	bcxx_set_AT_NSOCL(unsigned char socket);
 unsigned char 	bcxx_set_AT_NSOFT(unsigned char socket, char *ip,char *port,unsigned int len,char *inbuf,char *outbuf);
+unsigned char 	bcxx_set_AT_NSOCO(unsigned char socket, char *ip,char *port);
+unsigned char 	bcxx_set_AT_NSOSD(unsigned char socket, unsigned int len,char *inbuf,char *outbuf);
 
 unsigned char 	bcxx_set_AT_OPEN(char *type, char *addr, char *port);
 unsigned char 	bcxx_set_AT_CLOSE(void);

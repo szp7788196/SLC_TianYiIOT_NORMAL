@@ -89,7 +89,7 @@ u16 NetDataAnalysis(u8 *buf,u16 len,u8 *outbuf,u8 *hold_reg)
 		break;
 		
 		case 0xB2:			//OTA
-			
+			ret = SetUpdateFirmWareInfo(message_id,mid,buf,len,outbuf);
 		break;
 		
 		default:
@@ -165,56 +165,6 @@ u16 ControlLightLevel(u8 message_id,u16 mid,u8 *buf,u8 len,u8 *outbuf)
 
 	return out_len;
 }
-
-////下发更新固件命令
-//u16 SetUpdateFirmWareInfo(u8 addr_code,u16 mid_code,u8 *buf,u8 len,u8 *outbuf)
-//{
-//	u8 out_len = 0;
-//	u8 data_buf[2] = {0,0};
-//	data_buf[0] = cmd_code;
-
-//	if(len == 5)
-//	{
-//		NewFirmWareVer    = (((u16)(*(buf + 0))) << 8) + (u16)(*(buf + 1));
-//		NewFirmWareBagNum = (((u16)(*(buf + 2))) << 8) + (u16)(*(buf + 3));
-//		LastBagByteNum    = *(buf + 4);
-
-//		if(NewFirmWareBagNum == 0 || NewFirmWareBagNum > MAX_FW_BAG_NUM \
-//			|| NewFirmWareVer == 0 || NewFirmWareVer > MAX_FW_VER \
-//			|| LastBagByteNum == 0 || LastBagByteNum > MAX_FW_LAST_BAG_NUM)  //128 + 2 + 4 = 134
-//		{
-//			data_buf[1] = 1;
-//		}
-//		else
-//		{
-//			HaveNewFirmWare = 0xAA;
-//			if(NewFirmWareAdd == 0xAA)
-//			{
-//				NewFirmWareAdd = 0x55;
-//			}
-//			else if(NewFirmWareAdd == 0x55)
-//			{
-//				NewFirmWareAdd = 0xAA;
-//			}
-//			else
-//			{
-//				NewFirmWareAdd = 0xAA;
-//			}
-
-//			WriteOTAInfo(HoldReg,0);		//将数据写入EEPROM
-
-//			NeedToReset = 1;				//重新启动
-//		}
-//	}
-//	else
-//	{
-//		data_buf[1] = 2;
-//	}
-
-//	out_len = PackAckPacket(cmd_code,data_buf,outbuf);
-
-//	return out_len;
-//}
 
 //远程重启
 u16 ControlDeviceReset(u8 message_id,u16 mid,u8 *buf,u8 len,u8 *outbuf)
@@ -497,6 +447,63 @@ u16 SetDevicePowerIntfc(u8 message_id,u16 mid,u8 *buf,u8 len,u8 *outbuf)
 	else
 	{
 		data_buf[2] = 2;
+	}
+
+	out_len = PackAckPacket(message_id,data_buf,outbuf);
+
+	return out_len;
+}
+
+//下发更新固件命令
+u16 SetUpdateFirmWareInfo(u8 message_id,u16 mid,u8 *buf,u8 len,u8 *outbuf)
+{
+	u8 out_len = 0;
+	u8 temp_buf[11];
+	u8 data_buf[4] = {0,0,0,0};
+
+	data_buf[0] = (u8)(mid >> 8);
+	data_buf[1] = (u8)mid;
+
+	if(len == 16)
+	{
+		memset(temp_buf,0,11);
+		
+		StrToHex(temp_buf, (char *)(buf + 6), 5);
+		
+		NewFirmWareVer    = (((u16)temp_buf[0]) << 8) + (u16)temp_buf[1];
+		NewFirmWareBagNum = (((u16)temp_buf[2]) << 8) + (u16)temp_buf[3];
+		LastBagByteNum    = *(temp_buf + 4);
+
+		if(NewFirmWareBagNum == 0 || NewFirmWareBagNum > MAX_FW_BAG_NUM \
+			|| NewFirmWareVer == 0 || NewFirmWareVer > MAX_FW_VER \
+			|| LastBagByteNum == 0 || LastBagByteNum > MAX_FW_LAST_BAG_NUM)  //128 + 2 + 4 = 134
+		{
+			data_buf[1] = 1;
+		}
+		else
+		{
+			HaveNewFirmWare = 0xAA;
+			if(NewFirmWareAdd == 0xAA)
+			{
+				NewFirmWareAdd = 0x55;
+			}
+			else if(NewFirmWareAdd == 0x55)
+			{
+				NewFirmWareAdd = 0xAA;
+			}
+			else
+			{
+				NewFirmWareAdd = 0xAA;
+			}
+
+			WriteOTAInfo(HoldReg,0);		//将数据写入EEPROM
+
+//			NeedToReset = 1;				//重新启动
+		}
+	}
+	else
+	{
+		data_buf[1] = 2;
 	}
 
 	out_len = PackAckPacket(message_id,data_buf,outbuf);
