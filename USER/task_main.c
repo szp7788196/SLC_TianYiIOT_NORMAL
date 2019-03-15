@@ -60,6 +60,8 @@ void vTaskMAIN(void *pvParameters)
 			__disable_fault_irq();							//÷ÿ∆Ù÷∏¡Ó
 			NVIC_SystemReset();
 		}
+		
+//		SetLightLevel(PowerINTFC, 40);
 
 		delay_ms(100);
 //		MAIN_Satck = uxTaskGetStackHighWaterMark(NULL);

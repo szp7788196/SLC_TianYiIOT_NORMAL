@@ -42,7 +42,7 @@ u8 *DeviceID = NULL;				//设备ID
 u8 *DeviceUUID = NULL;				//设备UUID
 
 /***************************网络相关*********************************/
-u8 Operators = 0;					//运营商编号
+u8 Operators = 1;					//运营商编号
 u8 *APName = NULL;					//私有APN，不同客户APN不同
 u8 *ServerDomain = NULL;			//服务器域名
 u8 *ServerIP = NULL;				//服务器IP地址
@@ -947,7 +947,7 @@ u8 ReadUpLoadINVL(void)
 }
 
 //读取电源控制接口编号
-u8 ReadPowerINTFCC(void)
+u8 ReadPowerINTFCE(void)
 {
 	u8 ret = 0;
 
@@ -1008,6 +1008,8 @@ u8 ReadLightLevelPercent(void)
 			LightLevelPercent = 0;
 		}
 	}
+	
+	LightLevelPercent = 0;
 
 	return ret;
 }
@@ -1170,7 +1172,7 @@ void ReadParametersFromEEPROM(void)
 	ReadServerIP();
 	ReadServerPort();
 	ReadUpLoadINVL();
-	ReadPowerINTFCC();
+	ReadPowerINTFCE();
 	ReadTimeZone();
 	ReadLightLevelPercent();
 	ReadRegularTimeGroups();

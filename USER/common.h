@@ -406,7 +406,7 @@ u8 ReadServerDomain(void);
 u8 ReadServerIP(void);
 u8 ReadServerPort(void);
 u8 ReadUpLoadINVL(void);
-u8 ReadPowerINTFCC(void);
+u8 ReadPowerINTFCE(void);
 u8 ReadLightLevelPercent(void);
 u8 ReadTimeZone(void);
 u8 ReadTimeGroupNumber(void);

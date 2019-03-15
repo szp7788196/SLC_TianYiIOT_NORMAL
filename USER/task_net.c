@@ -8,6 +8,7 @@
 TaskHandle_t xHandleTaskNET = NULL;
 SensorMsg_S *p_tSensorMsgNet = NULL;			//用于装在传感器数据的结构体变量
 
+u8 SendDeviceUUID_OK = 0;						//发送UUID成功标识
 u8 SignalIntensity = 99;						//bg96的信号强度
 char *UdpSockedId = NULL;
 
@@ -112,6 +113,7 @@ s8 OnServerHandle(void)
 //向服务器定时发送传感器数据和心跳包
 void SendSensorDataToIOTPlatform(void)
 {
+	static time_t times_sec = 0;
 	BaseType_t xResult;
 	u8 send_len = 0;
 	u8 sensor_data_len = 0;
@@ -134,6 +136,18 @@ void SendSensorDataToIOTPlatform(void)
 	{
 //		SyncDataTimeFormNTPServer(&GetTimeOK);
 		SyncDataTimeFormBcxxModule(&GetTimeOK);
+	}
+	else if(SendDeviceUUID_OK == 0)
+	{
+		if(DeviceUUID != NULL)
+		{
+			if(GetSysTick1s() - times_sec >= 10)
+			{
+				times_sec = GetSysTick1s();
+				
+				send_len = PackNetData(0xB3,DeviceUUID,UU_ID_LEN - 2,send_buf);
+			}
+		}
 	}
 
 	if(send_len >= 1)
