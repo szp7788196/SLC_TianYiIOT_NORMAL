@@ -145,7 +145,7 @@ void SendSensorDataToIOTPlatform(void)
 			{
 				times_sec = GetSysTick1s();
 				
-				send_len = PackNetData(0xB3,DeviceUUID,UU_ID_LEN - 2,send_buf);
+				send_len = PackNetData(0xA9,DeviceUUID,UU_ID_LEN - 2,send_buf);
 			}
 		}
 	}
