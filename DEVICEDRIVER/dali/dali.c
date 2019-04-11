@@ -7,13 +7,13 @@ u8 flag;        		// status flag
 u8 bit_count;   		// nr of rec/send bits
 u16 tick_count; 		// nr of ticks of the timer
 
-bool bit_value;   		// value of actual bit
-bool actual_val;  		// bit value in this tick of timer
-bool former_val;  		// bit value in previous tick of timer
+Bool bit_value;   		// value of actual bit
+Bool actual_val;  		// bit value in this tick of timer
+Bool former_val;  		// bit value in previous tick of timer
 
 u8 recv_num;
 u16 send_num;
-bool recv_ok;
+Bool recv_ok;
 
 
 void DALI_Init(void)
@@ -84,7 +84,7 @@ void dali_send_data(u8 address, u8 command)
 	flag = SENDING_DATA;
 }
 
-bool dali_get_DALIIN(void)
+Bool dali_get_DALIIN(void)
 {
 	if (DALIIN_INVERT)
 	{
@@ -102,7 +102,7 @@ bool dali_get_DALIIN(void)
 	}
 }
 
-void dali_set_DALIOUT(bool pin_value)
+void dali_set_DALIOUT(Bool pin_value)
 {
 	if (DALIOUT_INVERT)
 	{
@@ -120,7 +120,7 @@ void dali_set_DALIOUT(bool pin_value)
 	}
 }
 
-bool dali_get_DALIOUT(void)
+Bool dali_get_DALIOUT(void)
 {
 	if (DALIOUT_INVERT)
 	{
@@ -274,13 +274,13 @@ void dali_send_tick(void)
 			}
 
 														// bit value (edge) selection
-			bit_value = (bool)((send_num >> (15 - bit_count)) & 0x01);
+			bit_value = (Bool)((send_num >> (15 - bit_count)) & 0x01);
 
 
 			if(!((tick_count - 24) & 0x0007))			// Every half bit -> Manchester coding
 			{ 											// div by 8
 				if(dali_get_DALIOUT() == bit_value) 	// former value of bit = new value of bit
-					dali_set_DALIOUT((bool)(1 - bit_value));
+					dali_set_DALIOUT((Bool)(1 - bit_value));
 			}
 
 			if(!((tick_count - 28) & 0x0007))			// Generate edge for actual bit

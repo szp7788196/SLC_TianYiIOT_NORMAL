@@ -19,9 +19,9 @@ void DALI_Init(void);
 u8 dali_get_flag(void);
 void dali_receive_data(void);
 void dali_send_data(u8 address, u8 command);
-bool dali_get_DALIIN(void);
-void dali_set_DALIOUT(bool pin_value);
-bool dali_get_DALIOUT(void);
+Bool dali_get_DALIIN(void);
+void dali_set_DALIOUT(Bool pin_value);
+Bool dali_get_DALIOUT(void);
 void dali_receive_tick(void);
 void dali_send_tick(void);
 
