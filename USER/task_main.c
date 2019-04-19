@@ -4,7 +4,6 @@
 #include "usart.h"
 #include "inventr.h"
 #include "pwm.h"
-#include "mcp4725.h"
 
 
 TaskHandle_t xHandleTaskMAIN = NULL;

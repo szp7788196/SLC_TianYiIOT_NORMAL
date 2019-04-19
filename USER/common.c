@@ -1041,7 +1041,7 @@ u8 ReadPowerINTFCE(void)
 			PowerINTFC = 2;
 		}
 	}
-
+PowerINTFC=0;
 	return ret;
 }
 
@@ -1082,7 +1082,7 @@ u8 ReadLightLevelPercent(void)
 		}
 		else
 		{
-			LightLevelPercent = 0;
+			LightLevelPercent = 200;
 		}
 	}
 	
@@ -1286,7 +1286,7 @@ void ReadParametersFromEEPROM(void)
 	ReadUpLoadINVL();
 	ReadPowerINTFCE();
 	ReadTimeZone();
-	ReadLightLevelPercent();
+//	ReadLightLevelPercent();
 	ReadRegularTimeGroups();
 	ReadOTAInfo(HoldReg);
 }
